@@ -1,0 +1,39 @@
+{
+  "title": "B616 Midterm Lessons",
+  "brand": "B616 · Midterm Lessons",
+  "course": "PBHL-B616 Advanced Statistical Computing",
+  "term": "Fall 2026",
+  "hero_title": "Midterm lessons, in study order",
+  "hero_sub": "Lessons that walk through the four lecture decks in plain language, starting from high-school math. Each lesson names the slide pages it covers, so you can check every formula against the professor's own slides.",
+  "study_tip": "The exam is closed book and handwritten, so writing it yourself is the practice that counts.",
+  "plan_intro": "The professor said the midterm stresses <b>matrix decomposition</b>, <b>splines</b> (the shortcut formula, choosing the smoothing parameter), and <b>cross validation</b>. That is why Chapter 3 comes first and gets the most time.",
+  "storage_key": "b616-lessons-v1",
+  "output": "B616_Lessons.html",
+  "exam": {
+    "iso": "2026-10-14T13:30",
+    "label": "Exam Wed 10/14 · 13:30 · HS-1110",
+    "name": "the exam"
+  },
+  "order": ["l0", "l3-1", "l3-2", "l3-3", "l3-4", "l3-5", "l4-1", "l4-2", "l2-1", "l2-2", "l2-3", "l1-1"],
+  "chapters": {
+    "0": "Start here",
+    "3": "Ch 3 · Smoothing",
+    "4": "Ch 4 · Trees",
+    "2": "Ch 2 · Matrices",
+    "1": "Ch 1 · Arithmetic"
+  },
+  "plan": [
+    {"date": "10/3", "day": "Sat 10/3", "lessons": ["l0", "l3-1"], "practice": "—"},
+    {"date": "10/4", "day": "Sun 10/4", "lessons": ["l3-2", "l3-3"], "practice": "HW2 Q1"},
+    {"date": "10/5", "day": "Mon 10/5", "lessons": ["l3-4", "l3-5"], "practice": "HW2 Q2, Q3; start Q4"},
+    {"date": "10/6", "day": "Tue 10/6", "lessons": ["l4-1", "l4-2"], "practice": "Finish HW2 and submit"},
+    {"date": "10/7", "day": "Wed 10/7", "lessons": ["l2-1"], "practice": "HW1 Q4 closed book"},
+    {"date": "10/8", "day": "Thu 10/8", "lessons": ["l2-2"], "practice": "Midterm 2018 P1 on paper"},
+    {"date": "10/9", "day": "Fri 10/9", "lessons": ["l2-3"], "practice": "HW1 Q5, Q6a"},
+    {"date": "10/10", "day": "Sat 10/10", "lessons": ["l1-1"], "practice": "Review Ch 3 on a blank page"},
+    {"date": "10/11", "day": "Sun 10/11", "lessons": [], "practice": "Mock exam #1 (75 min, closed book)"},
+    {"date": "10/12", "day": "Mon 10/12", "lessons": [], "practice": "Buffer: weak spots + cheat sheet draft"},
+    {"date": "10/13", "day": "Tue 10/13", "lessons": [], "practice": "Mock exam #2 + final cheat sheet"},
+    {"date": "10/14", "day": "Wed 10/14", "lessons": [], "practice": "Exam. Read the cheat sheet once."}
+  ]
+}

@@ -1,0 +1,321 @@
+<section class="lesson" id="l0" data-ch="0" data-short="L0" data-title="Math toolkit" data-date="Sat 10/3" data-minutes="70">
+  <div class="eyebrow"><span><b>Start here</b> · Lesson 0</span><span>Sat 10/3</span><span>~70 min</span><span>Supports every lecture deck</span></div>
+  <h1>The math toolkit for this course</h1>
+  <p class="idea"><span class="lbl">In one sentence</span><span class="m">Five tools (sums, slopes and bending, minimizing, matrices, averages of random quantities) appear on almost every slide, and each one is a small step beyond high-school math.</span></p>
+
+  <p>The slides assume a lot of background. This lesson fills the gaps you need for the rest of the course, and only those. Skim what you already know. Slow down on Sections 3, 5 and 6, because the smoothing-spline lessons depend on them.</p>
+
+  <h2>What you will be able to do</h2>
+  <ul class="roadmap">
+    <li><b>Read</b> the notation on the slides: \(x_i\), \(\sum\), \(\hat{y}\), \(I(\cdot)\), \((x-t)_+\).</li>
+    <li><b>Explain</b> why \(\int [g''(x)]^2\,dx\) measures how wiggly a curve is.</li>
+    <li><b>Minimize</b> a sum of squares by setting a derivative to zero.</li>
+    <li><b>Multiply</b> matrices, take a transpose, and say what an inverse and a trace are.</li>
+    <li><b>Use</b> \(E\), variance, bias and MSE without fear.</li>
+  </ul>
+
+  <h2>Words you need</h2>
+  <div class="tablewrap"><table class="glossary"><thead><tr><th>Term</th><th>中文</th><th>Plain meaning</th></tr></thead><tbody>
+    <tr><td>subscript</td><td>下标</td><td>The small index in \(x_i\). It says which observation: \(x_3\) is the 3rd x-value.</td></tr>
+    <tr><td>sum, \(\sum\)</td><td>求和</td><td>Add up a list of terms.</td></tr>
+    <tr><td>derivative</td><td>导数</td><td>Slope of a curve at a point.</td></tr>
+    <tr><td>second derivative</td><td>二阶导数</td><td>How fast the slope changes. It measures bending (curvature).</td></tr>
+    <tr><td>integral</td><td>积分</td><td>Area under a curve.</td></tr>
+    <tr><td>vector / matrix</td><td>向量 / 矩阵</td><td>A column of numbers / a rectangular table of numbers.</td></tr>
+    <tr><td>transpose</td><td>转置</td><td>Flip a matrix so rows become columns.</td></tr>
+    <tr><td>inverse</td><td>逆矩阵</td><td>The matrix that "undoes" another one, like 1/a undoes a.</td></tr>
+    <tr><td>trace</td><td>迹</td><td>Sum of the diagonal entries of a square matrix.</td></tr>
+    <tr><td>expectation \(E\)</td><td>期望</td><td>Long-run average of a random quantity.</td></tr>
+    <tr><td>variance</td><td>方差</td><td>Average squared distance from the expectation: the spread.</td></tr>
+    <tr><td>estimate, \(\hat{\ }\)</td><td>估计值</td><td>A hat means "computed from data": \(\hat{g}\) is our estimate of the unknown \(g\).</td></tr>
+  </tbody></table></div>
+
+  <h2>1. Reading the notation</h2>
+  <p><b>Data.</b> Almost every slide in Chapters 3 and 4 starts from \(n\) pairs of numbers \((x_1,y_1), (x_2,y_2), \dots, (x_n,y_n)\). Think of a spreadsheet with \(n\) rows: \(x_i\) is the input in row \(i\) (for example age), and \(y_i\) is the output in row \(i\) (for example log income).</p>
+  <p><b>Sums.</b> The symbol \(\sum\) means "add up".</p>
+  \[ \sum_{i=1}^{n} y_i = y_1 + y_2 + \dots + y_n. \]
+  <p class="words">Start with i = 1, stop at i = n, and add up every \(y_i\) along the way.</p>
+  <div class="box example"><span class="tag">Worked example</span>
+    <p>If \(y = (2, 5, 3)\), then \(\sum_{i=1}^3 y_i = 10\), the mean is \(\bar y = 10/3\), and \(\sum_{i=1}^3 (y_i - 3)^2 = 1 + 4 + 0 = 5\).</p>
+  </div>
+  <p><b>A model.</b> The slides write</p>
+  \[ y_i = g(x_i) + \epsilon_i, \qquad E(\epsilon_i) = 0,\quad \operatorname{Var}(\epsilon_i) = \sigma^2 . \]
+  <p class="words">Each output is a true smooth curve \(g\) evaluated at the input, plus random noise \(\epsilon_i\) that averages to zero and has spread \(\sigma^2\).</p>
+  <p>The whole of Chapter 3 is about one task: we see only the dots \((x_i, y_i)\), and we want to recover the curve \(g\). We never assume a formula for \(g\) such as "a straight line". That is what <b>nonparametric</b> means.</p>
+  <p><b>Other symbols you will meet:</b></p>
+  <div class="tablewrap"><table><thead><tr><th>Symbol</th><th>Read it as</th><th>Example</th></tr></thead><tbody>
+    <tr><td>\(\hat{g},\ \hat{\beta},\ \hat{y}_i\)</td><td>"g-hat": an estimate computed from data</td><td>\(\hat{y}_i = \hat g(x_i)\) is the fitted value in row \(i\).</td></tr>
+    <tr><td>\(I(\text{condition})\)</td><td>indicator: 1 if true, 0 if false</td><td>\(I(x > 2)\) is 1 at \(x=3\) and 0 at \(x=1\).</td></tr>
+    <tr><td>\((x-t)_+\)</td><td>"x minus t, plus part": \(\max(x-t, 0)\)</td><td>\((5-2)_+ = 3\), \((1-2)_+ = 0\).</td></tr>
+    <tr><td>\(\equiv\)</td><td>equal for every \(x\), identically</td><td>\(\sum_l B_l(x) \equiv 1\) means the sum is 1 at every \(x\).</td></tr>
+    <tr><td>\(\in\)</td><td>"belongs to"</td><td>\(g \in S_2[a,b]\): \(g\) is one of the allowed functions.</td></tr>
+    <tr><td>\(\arg\min_\beta\)</td><td>"the β that makes this smallest"</td><td>\(\arg\min_c (c-3)^2 = 3\).</td></tr>
+    <tr><td>\(O(n^3)\)</td><td>"grows like \(n^3\)"</td><td>Doubling \(n\) makes the work about 8 times larger.</td></tr>
+  </tbody></table></div>
+
+  <h2>2. Polynomials and pieces of polynomials</h2>
+  <p>A polynomial of degree \(q\) is \(\beta_0 + \beta_1 x + \beta_2 x^2 + \dots + \beta_q x^q\). Degree 1 is a straight line, degree 2 a parabola, degree 3 a cubic. A single polynomial is often too rigid to follow real data. A <b>spline</b> glues several low-degree polynomials together at points called <b>knots</b>. Lesson 3.1 builds this in detail.</p>
+  <p>The "plus function" \((x - t)_+^3\) is zero to the left of \(t\) and grows like a cubic to the right. Adding \(\alpha\,(x-t)_+^3\) to a cubic lets the curve change its shape after the knot \(t\) without breaking it. You will see this on lect3 p6 and in the mixed-model slide (lect3 p36).</p>
+
+  <h2>3. Slope and bending: first and second derivatives</h2>
+  <p>The <b>first derivative</b> \(g'(x)\) is the slope of the curve at \(x\): positive when the curve goes up, negative when it goes down. The <b>second derivative</b> \(g''(x)\) is the slope of the slope. It tells you how the direction is changing, so it measures <b>bending</b>:</p>
+  <ul>
+    <li>A straight line has the same slope everywhere, so \(g''(x) = 0\) everywhere.</li>
+    <li>A gentle hill has a small \(g''\).</li>
+    <li>A curve that zig-zags up and down has a large \(g''\), with sign changing at every turn.</li>
+  </ul>
+  <p>Squaring removes the sign, and integrating (taking the area) adds the bending up along the whole interval:</p>
+  \[ \text{wiggliness of } g \;=\; \int_a^b [g''(u)]^2\, du . \]
+  <p class="words">At every point, measure how sharply the curve bends, square it so bends in both directions count, then add up over the whole interval.</p>
+  <p>This number is the <b>penalty</b> in the smoothing spline (lect3 p3). Play with the figure until the next sentence feels obvious: <i>a straight line has penalty 0, and the more a curve wiggles, the larger its penalty.</i></p>
+
+  <figure class="viz" id="l0-fig1">
+    <div class="vtitle">Slope, bending, and the wiggliness penalty</div>
+    <div class="controls"></div>
+    <div class="canvas-host"></div>
+    <div class="readout" id="l0-fig1-read"></div>
+    <figcaption>Top: the curve \(g\) with its tangent line at the marked point; the tangent's slope is \(g'(x_0)\). Bottom: \([g''(x)]^2\). The shaded area is \(\int [g'']^2\), the penalty. Switch curves and compare the areas.</figcaption>
+  </figure>
+
+  <div class="check" data-qid="l0-q1" data-topic="What ∫(g'')² measures">
+    <span class="tag">Check yourself</span>
+    <p>(a) What is \(\int_0^1 [g''(u)]^2\,du\) for \(g(u) = 3 + 2u\)? (b) For \(g(u) = u^2\)? Answer on paper first.</p>
+    <details><summary>Show answer</summary><div>
+      <p>(a) \(g'' = 0\), so the integral is 0. Straight lines are never penalized.</p>
+      <p>(b) \(g'(u) = 2u\), \(g''(u) = 2\), so \(\int_0^1 2^2\,du = 4\).</p>
+    </div></details>
+  </div>
+
+  <h3>Integration by parts (used once, in Lesson 3.2)</h3>
+  <p>The product rule for derivatives, \((uv)' = u'v + uv'\), integrated from \(a\) to \(b\) and rearranged, gives</p>
+  \[ \int_a^b u(x)\, v'(x)\, dx \;=\; u(b)v(b) - u(a)v(a) \;-\; \int_a^b u'(x)\, v(x)\, dx . \]
+  <p class="words">You can move the derivative from one factor to the other, if you pay with the boundary term and a minus sign.</p>
+  <p>The proof that smoothing splines are natural cubic splines (lect3 p20) uses this rule twice. You only need to recognize it.</p>
+
+  <h2>4. Finding the minimum: set the derivative to zero</h2>
+  <p>At the bottom of a valley the curve is flat, so the slope is zero. To find the value that makes something smallest, take the derivative and set it to 0.</p>
+  <div class="box example"><span class="tag">Worked example: least squares with one number</span>
+    <p>Choose one number \(c\) to summarize data \(y_1,\dots,y_n\) by making \(\sum_i (y_i - c)^2\) as small as possible.</p>
+    <ol class="steps">
+      <li><p>\(\dfrac{d}{dc}\sum_i (y_i - c)^2 = \sum_i 2(y_i - c)(-1) = -2\sum_i (y_i - c)\).</p><p class="because">Chain rule on each square: the derivative of \((y_i-c)^2\) is \(2(y_i-c)\) times the derivative of the inside, which is \(-1\).</p></li>
+      <li><p>Set it to zero: \(\sum_i y_i - nc = 0\).</p><p class="because">At the minimum the slope is zero.</p></li>
+      <li><p>\(c = \frac{1}{n}\sum_i y_i = \bar y\).</p><p class="because">Solve for \(c\). The mean is the least-squares summary.</p></li>
+    </ol>
+  </div>
+  <figure class="viz" id="l0-fig2">
+    <div class="vtitle">Least squares: slide c and watch the sum of squares</div>
+    <div class="controls"></div>
+    <div class="canvas-host"></div>
+    <div class="readout" id="l0-fig2-read"></div>
+    <figcaption>Left: the data with the vertical misses \(y_i - c\). Right: the sum of squared misses as a function of \(c\). Its lowest point is at the mean \(\bar y\), where the curve is flat.</figcaption>
+  </figure>
+  <p>Every "fit" in this course works this way: write down a sum of squares (plus perhaps a penalty), take the derivative, set it to zero. In Lesson 3.3 we do exactly this with many unknowns at once, using matrices.</p>
+
+  <h2>5. Vectors and matrices</h2>
+  <p>A <b>vector</b> is a column of numbers, for example the \(n\) outputs \(y = (y_1, \dots, y_n)'\). A <b>matrix</b> is a table with \(n\) rows and \(m\) columns, written "\(n \times m\)". The entry in row \(i\), column \(j\) of \(A\) is \(a_{ij}\).</p>
+  <p><b>Transpose.</b> \(A'\) (also written \(A^t\) or \(A^T\)) swaps rows and columns: the entry in row \(i\), column \(j\) of \(A'\) is \(a_{ji}\). A column vector \(y\) becomes a row vector \(y'\).</p>
+  <p><b>Multiplication.</b> \(C = AB\) is defined when the number of columns of \(A\) equals the number of rows of \(B\). Entry \((i,j)\) of \(C\) is row \(i\) of \(A\) "dotted" with column \(j\) of \(B\):</p>
+  \[ c_{ij} = \sum_{l} a_{il}\, b_{lj} . \]
+  <p class="words">Walk along row i of A and down column j of B at the same time, multiply the pairs, and add them up.</p>
+  <figure class="viz" id="l0-fig3">
+    <div class="vtitle">Matrix multiplication, one entry at a time</div>
+    <div class="controls"></div>
+    <div class="canvas-host" id="l0-fig3-host"></div>
+    <figcaption>Click any entry of the result \(C = AB\). The row of \(A\) and the column of \(B\) that produce it light up, and the arithmetic is written out.</figcaption>
+  </figure>
+
+  <h3>Matrix times vector = many weighted sums</h3>
+  <p>If \(S\) is \(n\times n\) and \(y\) is a vector of length \(n\), then \(\hat y = S y\) is a vector whose \(i\)-th entry is</p>
+  \[ \hat y_i = \sum_{j=1}^n s_{ij}\, y_j . \]
+  <p class="words">Each fitted value is a weighted sum of all the observed y's, with weights taken from row i of S.</p>
+  <p>Hold on to this picture. In Lesson 3.3 the smoothing spline gives \(\hat y = S_\lambda y\), so every fitted value is a weighted average of nearby data, and the weight a point puts on <i>itself</i>, \(s_{ii}\), is the key to the shortcut formula in Lesson 3.4.</p>
+
+  <h3>Identity, inverse, solving</h3>
+  <ul>
+    <li>The <b>identity</b> \(I_n\) has 1 on the diagonal and 0 elsewhere. \(I y = y\), like multiplying by 1.</li>
+    <li>The <b>inverse</b> \(A^{-1}\) of a square matrix satisfies \(A^{-1}A = AA^{-1} = I\). It exists only when \(A\) is "full rank" (no column is a combination of the others).</li>
+    <li>Solving \(A\beta = b\) means finding \(\beta = A^{-1}b\). In practice computers <i>never</i> form \(A^{-1}\); they use a decomposition (Chapter 2). The slides say this too: "do not calculate the inverse in these formulas" (lect3 p26).</li>
+    <li>Two useful rules: \((AB)' = B'A'\) and \((AB)^{-1} = B^{-1}A^{-1}\) (order reverses).</li>
+  </ul>
+  <p><b>Trace.</b> For a square matrix, \(\operatorname{trace}(A) = \sum_i a_{ii}\), the sum of the diagonal. The smoothing spline's "degrees of freedom" is \(\operatorname{trace}(S_\lambda)\) (lect3 p28).</p>
+  <p><b>The vector of ones.</b> \(1_n = (1,1,\dots,1)'\). Then \(S 1_n\) is the vector of row sums of \(S\). If \(S 1_n = 1_n\), every row of weights sums to 1, so every fitted value is a true weighted average (lect3 p27).</p>
+
+  <h3>Sums of squares in matrix form</h3>
+  <p>If \(X\) is \(n\times p\) and \(\beta\) is a vector of length \(p\), then \(X\beta\) is a vector of \(n\) fitted values, and</p>
+  \[ (y - X\beta)'(y - X\beta) = \sum_{i=1}^n \big(y_i - (X\beta)_i\big)^2 . \]
+  <p class="words">A row vector times the same column vector is the sum of the squared entries, so this is the residual sum of squares.</p>
+  <div class="box hard"><span class="tag">Hard point · slow down</span>
+    <p><b>Two derivative rules you will use in Lesson 3.3.</b> They are the matrix versions of rules you already know. For a symmetric matrix \(P\):</p>
+    <div class="tablewrap"><table><thead><tr><th>One number \(b\)</th><th>Vector \(\beta\)</th></tr></thead><tbody>
+      <tr><td>\(\dfrac{d}{db}(y - xb)^2 = -2x(y - xb)\)</td><td>\(\dfrac{\partial}{\partial\beta}(y - X\beta)'(y - X\beta) = -2X'(y - X\beta)\)</td></tr>
+      <tr><td>\(\dfrac{d}{db}\, p\,b^2 = 2p\,b\)</td><td>\(\dfrac{\partial}{\partial\beta}\, \beta' P \beta = 2P\beta\)</td></tr>
+    </tbody></table></div>
+    <p>"Taking the derivative with respect to a vector" just means taking the derivative with respect to each entry \(\beta_1, \beta_2, \dots\) separately and stacking the answers into a vector. Setting that vector to 0 gives one equation per unknown. You do not need to prove these rules for the exam; you need to use them.</p>
+  </div>
+
+  <div class="check" data-qid="l0-q2" data-topic="Matrix multiplication and transpose">
+    <span class="tag">Check yourself</span>
+    <p>Let \(A = \begin{pmatrix}1 &amp; 2\\ 0 &amp; 3\end{pmatrix}\) and \(v = (4, 1)'\). Compute \(Av\), \(A'\), and \(\operatorname{trace}(A)\).</p>
+    <details><summary>Show answer</summary><div>
+      <p>\(Av = (1\cdot4 + 2\cdot1,\; 0\cdot4 + 3\cdot1)' = (6, 3)'\). \(A' = \begin{pmatrix}1 &amp; 0\\ 2 &amp; 3\end{pmatrix}\). \(\operatorname{trace}(A) = 1 + 3 = 4\).</p>
+    </div></details>
+  </div>
+  <div class="check" data-qid="l0-q3" data-topic="Row sums: S·1 = 1 means weighted average">
+    <span class="tag">Check yourself</span>
+    <p>A 3×3 matrix \(S\) has rows \((0.5, 0.5, 0)\), \((0.25, 0.5, 0.25)\), \((0, 0.5, 0.5)\). Compute \(S 1_3\) and \(S y\) for \(y = (2, 4, 6)'\). What does \(S\) do to the data?</p>
+    <details><summary>Show answer</summary><div>
+      <p>\(S1_3 = (1, 1, 1)'\): every row sums to 1. \(Sy = (3, 4, 5)'\). Each fitted value is a weighted average of its neighbours, so \(S\) smooths the data. Here \(s_{22} = 0.5\) is how much the 2nd fitted value depends on its own \(y_2\).</p>
+    </div></details>
+  </div>
+  <div class="check" data-qid="l0-q4" data-topic="Gradient of a quadratic: set derivative to zero">
+    <span class="tag">Check yourself</span>
+    <p>Minimize \(f(b) = (5 - 2b)^2 + 3b^2\) over the number \(b\). (This is a tiny penalized least squares problem.)</p>
+    <details><summary>Show answer</summary><div>
+      <p>\(f'(b) = -4(5 - 2b) + 6b = -20 + 14b\). Setting it to 0 gives \(b = 20/14 = 10/7 \approx 1.43\). Without the penalty \(3b^2\) the answer would be \(5/2 = 2.5\): the penalty pulls the estimate toward 0. In matrix form this is \((x'x + \lambda)b = x'y\) with \(x=2, y=5, \lambda=3\): \((4+3)b = 10\).</p>
+    </div></details>
+  </div>
+
+  <h2>6. Random quantities: expectation, variance, bias, MSE</h2>
+  <p>The noise \(\epsilon_i\) is random, so \(y_i\) is random, and so is anything we compute from the data, like \(\hat g(x)\). If we could repeat the whole study many times, \(\hat g(x)\) would come out a little different each time.</p>
+  <ul>
+    <li><b>Expectation</b> \(E(Z)\): the average of \(Z\) over infinitely many repeats.</li>
+    <li><b>Variance</b> \(\operatorname{Var}(Z) = E\big[(Z - E Z)^2\big]\): how much \(Z\) varies from repeat to repeat.</li>
+    <li><b>Linearity:</b> for fixed numbers \(a, b\) and a fixed matrix \(S\), \(E(aZ + b) = aE(Z) + b\) and \(E(Sy) = S\,E(y)\). The slides use this on lect3 p27.</li>
+    <li><b>Bias</b> of an estimate: \(E(\hat g(x)) - g(x)\). How far off it is on average.</li>
+    <li><b>Mean squared error:</b> \(E\big[(\hat g(x) - g(x))^2\big] = \text{bias}^2 + \text{variance}\). The proof is on lect3 new-deck slide 49; you will meet it in Lesson 3.5.</li>
+  </ul>
+  <div class="box why"><span class="tag">Why this matters</span>
+    <p>All of Chapter 3 is a fight between bias and variance. A very flexible curve follows the noise (small bias, large variance). A very stiff curve ignores real bumps (large bias, small variance). The smoothing parameter \(\lambda\) (or bandwidth \(h\)) sets the balance, and cross validation chooses it from the data.</p>
+  </div>
+  <div class="check" data-qid="l0-q5" data-topic="Bias, variance, MSE definitions">
+    <span class="tag">Check yourself</span>
+    <p>An estimator of the number 10 gives 9, 11, 9, 11 over four equally likely repeats. What are its bias, variance and MSE?</p>
+    <details><summary>Show answer</summary><div>
+      <p>The average is 10, so bias = 0. Variance = average of \((\pm1)^2\) = 1. MSE = \(0^2 + 1 = 1\).</p>
+    </div></details>
+  </div>
+
+  <h2>7. Orders of growth</h2>
+  <p>"Grows like" statements compare how fast things change when \(n\) gets large. If the work is about \(n^3\), going from \(n=100\) to \(n=200\) multiplies it by \(2^3 = 8\). If an error shrinks like \(n^{-4/5}\), multiplying the sample size by 32 shrinks the error by \(32^{4/5} = 16\). Chapter 2 counts operations this way and Chapter 3 states rates this way (lect3 p47).</p>
+  <div class="check" data-qid="l0-q6" data-topic="Orders of growth with powers of n">
+    <span class="tag">Check yourself</span>
+    <p>An optimal bandwidth behaves like \(h \propto n^{-1/5}\). By what factor does \(h\) shrink if \(n\) grows from 1,000 to 32,000?</p>
+    <details><summary>Show answer</summary><div><p>\(n\) grows by 32, so \(h\) shrinks by \(32^{1/5} = 2\). The bandwidth halves.</p></div></details>
+  </div>
+
+  <h2>Cheat-sheet lines</h2>
+  <div class="key"><span class="tag">Copy to your cheat sheet</span>
+    <ul>
+      <li>\(c_{ij} = \sum_l a_{il} b_{lj}\); \((AB)' = B'A'\); \((AB)^{-1} = B^{-1}A^{-1}\); \(\operatorname{trace}(A) = \sum_i a_{ii}\).</li>
+      <li>\(\partial/\partial\beta\ (y - X\beta)'(y - X\beta) = -2X'(y - X\beta)\); \(\partial/\partial\beta\ \beta'P\beta = 2P\beta\) (P symmetric).</li>
+      <li>\(E(Sy) = S\,E(y)\); MSE = bias² + variance.</li>
+      <li>\(\int [g'']^2 = 0\) exactly when \(g\) is a straight line.</li>
+    </ul>
+  </div>
+</section>
+<script>
+registerLesson('l0', function (root) {
+  /* ---------- fig1: slope, bending, penalty ---------- */
+  const curves = [
+    { name: 'Straight line', g: (x) => 0.2 + 0.6 * x, d1: () => 0.6, d2: () => 0 },
+    { name: 'Gentle hill', g: (x) => 0.3 + 0.5 * Math.sin(Math.PI * x), d1: (x) => 0.5 * Math.PI * Math.cos(Math.PI * x), d2: (x) => -0.5 * Math.PI * Math.PI * Math.sin(Math.PI * x) },
+    { name: 'Wiggly', g: (x) => 0.35 + 0.3 * x + 0.12 * Math.sin(6 * Math.PI * x), d1: (x) => 0.3 + 0.72 * Math.PI * Math.cos(6 * Math.PI * x), d2: (x) => -4.32 * Math.PI * Math.PI * Math.sin(6 * Math.PI * x) },
+  ];
+  let ci = 1, x0 = 0.3;
+  const f1 = root.querySelector('#l0-fig1');
+  const ctrl1 = f1.querySelector('.controls');
+  Viz.seg(ctrl1, curves.map((c) => c.name), (i) => { ci = i; fig1.render(); }, 1);
+  Viz.slider(ctrl1, { id: 'l0-x0', label: 'point x₀', min: 0.02, max: 0.98, step: 0.01, value: x0, onInput: (v) => { x0 = v; fig1.render(); } });
+  const penalty = (c) => { let s = 0; const N = 2000; for (let i = 0; i < N; i++) { const x = (i + 0.5) / N; s += c.d2(x) ** 2; } return s / N; };
+  const fig1 = Viz.figure(f1.querySelector('.canvas-host'), {
+    height: (w) => (w < 520 ? 420 : 460),
+    draw(ctx, w, h) {
+      const c = curves[ci];
+      const top = h * 0.55;
+      const P = Viz.frame(ctx, w, top, { xlim: [0, 1], ylim: [0, 1.05], pad: { b: 26 } });
+      P.axes({ ylabel: 'g(x)' });
+      P.fn(c.g, Viz.color(0), 2.5);
+      const y0 = c.g(x0), s = c.d1(x0);
+      P.clip(() => P.fn((x) => y0 + s * (x - x0), Viz.color(1), 1.5, [6, 4]));
+      P.points([x0], [y0], Viz.color(1), 5);
+      P.text(`slope g'(x₀) = ${s.toFixed(2)}`, x0, y0, { dx: 10, dy: -14, col: Viz.color(1), mono: true, size: 11 });
+      ctx.save(); ctx.translate(0, top);
+      const ymax = Math.max(1, ...Array.from({ length: 200 }, (_, i) => curves[ci].d2((i + 0.5) / 200) ** 2)) * 1.1;
+      const Q = Viz.frame(ctx, w, h - top, { xlim: [0, 1], ylim: [0, ymax], pad: { t: 10, b: 32 } });
+      Q.axes({ xlabel: 'x', ylabel: "[g''(x)]²", ny: 3, fmt: (v) => (v >= 100 ? v.toFixed(0) : String(v)) });
+      const xs = [], ys = []; for (let i = 0; i <= 300; i++) { const x = i / 300; xs.push(x); ys.push(c.d2(x) ** 2); }
+      Q.area(xs, 0, ys, Viz.color(2), 0.25); Q.line(xs, ys, Viz.color(2), 2);
+      Q.vline(x0, Viz.color('muted'));
+      ctx.restore();
+      root.querySelector('#l0-fig1-read').innerHTML = `<span>g''(x₀) = <b>${c.d2(x0).toFixed(2)}</b></span><span>penalty ∫[g'']² = <b>${penalty(c).toFixed(1)}</b></span>`;
+    },
+  });
+
+  /* ---------- fig2: least squares with one number ---------- */
+  const R = Viz.rng(7); const ys = Array.from({ length: 8 }, () => +(5 + 1.6 * R.normal()).toFixed(1));
+  const ybar = ys.reduce((a, b) => a + b, 0) / ys.length;
+  let c2 = 3.5;
+  const f2 = root.querySelector('#l0-fig2');
+  Viz.slider(f2.querySelector('.controls'), { id: 'l0-c', label: 'c', min: 2, max: 8, step: 0.01, value: c2, onInput: (v) => { c2 = v; fig2.render(); } });
+  const SS = (c) => ys.reduce((s, y) => s + (y - c) ** 2, 0);
+  const fig2 = Viz.figure(f2.querySelector('.canvas-host'), {
+    height: (w) => (w < 560 ? 520 : 300),
+    draw(ctx, w, h) {
+      const narrow = w < 560;
+      const wl = narrow ? w : w * 0.5, hl = narrow ? h / 2 : h;
+      const P = Viz.frame(ctx, wl, hl, { xlim: [0.5, 8.5], ylim: [1, 9], pad: { r: 10 } });
+      P.axes({ xlabel: 'i', ylabel: 'y', xticks: [1, 2, 3, 4, 5, 6, 7, 8] });
+      P.hline(c2, Viz.color(1), [], 2);
+      ys.forEach((y, i) => P.segment(i + 1, y, i + 1, c2, Viz.color(1), 1.2, [3, 3]));
+      P.points(ys.map((_, i) => i + 1), ys, Viz.color('ink'), 4);
+      P.text('c', 8.4, c2, { col: Viz.color(1), dy: -10 });
+      ctx.save(); if (narrow) ctx.translate(0, hl); else ctx.translate(wl, 0);
+      const Q = Viz.frame(ctx, wl, hl, { xlim: [2, 8], ylim: [0, SS(8) * 1.05], pad: { l: 52 } });
+      Q.axes({ xlabel: 'c', ylabel: 'Σ (yᵢ − c)²', fmt: (v) => String(Math.round(v)) });
+      Q.fn(SS, Viz.color(0), 2.5);
+      Q.vline(ybar, Viz.color('green'), [5, 4], 1.5);
+      Q.text('ȳ', ybar, SS(8) * 0.95, { col: Viz.color('green'), dx: 5 });
+      Q.points([c2], [SS(c2)], Viz.color(1), 5);
+      ctx.restore();
+      root.querySelector('#l0-fig2-read').innerHTML = `<span>c = <b>${c2.toFixed(2)}</b></span><span>Σ(yᵢ − c)² = <b>${SS(c2).toFixed(2)}</b></span><span>ȳ = <b>${ybar.toFixed(2)}</b>, minimum = <b>${SS(ybar).toFixed(2)}</b></span>`;
+    },
+  });
+
+  /* ---------- fig3: matrix multiplication explorer (HTML grid) ---------- */
+  const A = [[1, 2, 3], [4, 0, -1]], B = [[2, 1], [0, 3], [1, -2]];
+  const C = A.map((r) => B[0].map((_, j) => r.reduce((s, a, l) => s + a * B[l][j], 0)));
+  const host = root.querySelector('#l0-fig3-host');
+  host.innerHTML = `
+    <style>
+      #l0-fig3-host .mm{display:flex;flex-wrap:wrap;gap:1rem 1.6rem;align-items:center;font-family:var(--f-mono);}
+      #l0-fig3-host table.m{border-collapse:separate;border-spacing:3px}
+      #l0-fig3-host table.m td{border:1px solid var(--rule);min-width:2.4rem;height:2.2rem;text-align:center;padding:0 .3rem;border-radius:3px;background:var(--paper)}
+      #l0-fig3-host table.m td.on{background:var(--hl);border-color:var(--ink)}
+      #l0-fig3-host table.res td{cursor:pointer;background:var(--accent-soft)}
+      #l0-fig3-host table.res td.sel{background:var(--accent);color:var(--on-accent)}
+      #l0-fig3-host .lab{font-family:var(--f-display);font-weight:700;text-align:center;margin-bottom:.2rem}
+      #l0-fig3-host .calc{margin-top:.8rem;font-family:var(--f-mono);font-size:.9rem}
+    </style>
+    <div class="mm">
+      <div><div class="lab">A (2×3)</div><table class="m" id="l0-mA"></table></div>
+      <div><div class="lab">B (3×2)</div><table class="m" id="l0-mB"></table></div>
+      <div><div class="lab">C = AB (2×2)</div><table class="m res" id="l0-mC"></table></div>
+    </div>
+    <div class="calc" id="l0-calc"></div>`;
+  const fill = (id, M, cls) => { host.querySelector('#' + id).innerHTML = M.map((r, i) => '<tr>' + r.map((v, j) => `<td data-i="${i}" data-j="${j}" ${cls ? 'tabindex="0" role="button"' : ''}>${v}</td>`).join('') + '</tr>').join(''); };
+  fill('l0-mA', A); fill('l0-mB', B); fill('l0-mC', C, true);
+  function pick(i, j) {
+    host.querySelectorAll('td').forEach((td) => td.classList.remove('on', 'sel'));
+    host.querySelectorAll('#l0-mA td').forEach((td) => { if (+td.dataset.i === i) td.classList.add('on'); });
+    host.querySelectorAll('#l0-mB td').forEach((td) => { if (+td.dataset.j === j) td.classList.add('on'); });
+    host.querySelector(`#l0-mC td[data-i="${i}"][data-j="${j}"]`).classList.add('sel');
+    const terms = A[i].map((a, l) => `${a}×${B[l][j] < 0 ? '(' + B[l][j] + ')' : B[l][j]}`);
+    host.querySelector('#l0-calc').textContent = `c${i + 1}${j + 1} = row ${i + 1} of A · column ${j + 1} of B = ${terms.join(' + ')} = ${C[i][j]}`;
+  }
+  host.querySelectorAll('#l0-mC td').forEach((td) => {
+    td.addEventListener('click', () => pick(+td.dataset.i, +td.dataset.j));
+    td.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pick(+td.dataset.i, +td.dataset.j); } });
+  });
+  pick(0, 0);
+});
+</script>
